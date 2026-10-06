@@ -1,0 +1,6 @@
+{
+  "name": "cc-sprint-tracker",
+  "private": true,
+  "type": "module",
+  "description": "Chrome extension that tracks the current CC sprint against the dev sheet."
+}

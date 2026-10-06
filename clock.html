@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sprint clock</title>
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="float.css" />
+  </head>
+  <body class="float-body">
+    <main class="float-app" id="clockApp">
+      <header class="float-head">
+        <div>
+          <p class="eyebrow">Reminder</p>
+          <h1>Sprint clock</h1>
+          <p class="float-note" id="clockNote">Close this any time. The timer keeps running.</p>
+        </div>
+        <div class="head-actions">
+          <button type="button" class="ghost icon" id="pinClock" hidden aria-label="Pin clock on top" aria-pressed="false">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M16 9V4h1V2H7v2h1v5l-2 2v2h5.2v7h1.6v-7H18v-2l-2-2Z"
+              />
+            </svg>
+          </button>
+          <button type="button" class="ghost icon" id="closeClock" aria-label="Close clock">✕</button>
+        </div>
+      </header>
+      <p class="float-error" id="clockError" hidden></p>
+      <div class="float-list" id="clockList"></div>
+    </main>
+    <script type="module" src="clock.js"></script>
+  </body>
+</html>

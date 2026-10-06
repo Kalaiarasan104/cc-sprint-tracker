@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sprint Tracker settings</title>
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Sprint Tracker</h1>
+      <p class="lead">
+        Paste a Jira board link in the panel. The extension loads that board’s active sprint.
+        Stay signed in to the same Atlassian site in this Chrome profile.
+        Dev done and released live come from the ticket status.
+      </p>
+
+      <form id="settingsForm">
+        <fieldset>
+          <legend>Jira sign-in fallback</legend>
+          <label>Email <input name="jiraEmail" type="email" autocomplete="username" placeholder="Only needed with an API token" /></label>
+          <label>API token <input name="jiraApiToken" type="password" autocomplete="current-password" placeholder="Leave blank to keep the saved token" /></label>
+          <p class="hint">If the board loads while you are signed in, leave the token empty. Create a token at <a href="https://id.atlassian.com/manage-profile/security/api-tokens">id.atlassian.com</a> only when Jira returns an auth error.</p>
+          <label class="check"><input name="clearToken" type="checkbox" /> Remove saved API token</label>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit">Save</button>
+        </div>
+        <p id="saveStatus" class="hint" role="status"></p>
+      </form>
+    </main>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

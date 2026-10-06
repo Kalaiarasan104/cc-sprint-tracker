@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sprint Tracker</title>
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Current sprint</p>
+        <h1 id="sprintName">Loading sprint…</h1>
+        <p id="sprintMeta" class="meta"></p>
+      </div>
+      <div class="top-actions">
+        <button id="refreshButton" type="button">Refresh</button>
+        <button id="settingsButton" type="button">Settings</button>
+      </div>
+    </header>
+
+    <form id="boardForm" class="board-form">
+      <label for="boardUrlInput">Jira board link</label>
+      <div class="board-row">
+        <input
+          id="boardUrlInput"
+          type="url"
+          placeholder="https://yoursite.atlassian.net/jira/software/c/projects/KEY/boards/123"
+          required
+        />
+        <button type="submit">Load</button>
+      </div>
+    </form>
+
+    <section id="stats" class="stats" hidden></section>
+    <div id="banner" class="banner" hidden></div>
+    <div id="timeUp" class="time-up" hidden></div>
+
+    <div class="toolbar">
+      <input id="searchInput" type="search" placeholder="Search key, summary, person" aria-label="Search tasks" />
+      <label class="check"><input id="onlyMine" type="checkbox" checked /> Mine</label>
+      <label class="check"><input id="hideDone" type="checkbox" checked /> Still in dev</label>
+    </div>
+
+    <p id="emptyState" class="empty" hidden>No tasks match this view.</p>
+    <ul id="taskList" class="task-list"></ul>
+    <footer id="statusLine" class="status-line"></footer>
+    <div id="durationMenu" class="duration-menu" hidden></div>
+    <script type="module" src="panel.js"></script>
+  </body>
+</html>
