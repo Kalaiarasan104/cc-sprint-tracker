@@ -5,6 +5,7 @@ import {
   formatDateTime,
   formatDisplayDate,
   formatTimeLeft,
+  normalizeTimerParts,
   timerDurationMs,
   todayIso,
 } from "./lib/dates.js";
@@ -127,10 +128,11 @@ taskList.addEventListener("focusin", (event) => {
 taskList.addEventListener("input", (event) => {
   const field = event.target.closest(".duration-value");
   if (!field) return;
-  const maxDigits = field.dataset.timerPart === "hours" ? 3 : 2;
+  const maxDigits = field.dataset.timerPart === "hours" ? 3 : 5;
   const digits = field.value.replace(/\D/g, "").slice(0, maxDigits);
   if (digits !== field.value) field.value = digits;
   field.dataset.value = digits;
+  if (field.dataset.timerPart === "minutes") carryExtraMinutes(field.closest("[data-key]"));
   if (openDurationButton === field) highlightDurationChoice(field);
 });
 
@@ -175,7 +177,24 @@ document.addEventListener(
   true,
 );
 
+function carryExtraMinutes(task) {
+  if (!task) return;
+  const hoursField = task.querySelector('[data-timer-part="hours"]');
+  const minutesField = task.querySelector('[data-timer-part="minutes"]');
+  const parts = normalizeTimerParts(hoursField.value, minutesField.value);
+  if (!parts || Number(minutesField.value) <= 59) return;
+  writeTimerPart(hoursField, parts.hours);
+  writeTimerPart(minutesField, parts.minutes);
+}
+
+function writeTimerPart(field, value) {
+  const text = String(value);
+  field.value = text;
+  field.dataset.value = text;
+}
+
 function setCustomTimer(task, issueKey) {
+  carryExtraMinutes(task);
   let durationMs;
   try {
     durationMs = timerDurationMs(
