@@ -49,8 +49,8 @@ test("parseSheet maps ticket, ETA, and dev done columns", () => {
   const csv = [
     "Sprint tracker",
     "Jira,Owner,ETA,Dev done date",
-    "https://anywhereworks.atlassian.net/browse/CC-3592,Kalai,03/10/2026,01/10/2026",
-    "BC-17377,Kalai,02/10/2026,",
+    "https://acme.atlassian.net/browse/CC-101,Alex,03/10/2026,01/10/2026",
+    "BC-102,Alex,02/10/2026,",
   ].join("\n");
 
   const parsed = parseSheet(csv, { dateOrder: "dmy" });
@@ -58,12 +58,12 @@ test("parseSheet maps ticket, ETA, and dev done columns", () => {
   assert.equal(columnLabel(parsed.headers, parsed.mapping.eta), "ETA");
   assert.equal(columnLabel(parsed.headers, parsed.mapping.devDone), "Dev done date");
   assert.deepEqual(parsed.rows[0], {
-    issueKeys: ["CC-3592"],
+    issueKeys: ["CC-101"],
     eta: "2026-10-03",
     devDoneDate: "2026-10-01",
     storyPoints: "",
   });
-  assert.deepEqual(extractIssueKeys(parsed.rows[1].issueKeys.join(" ")), ["BC-17377"]);
+  assert.deepEqual(extractIssueKeys(parsed.rows[1].issueKeys.join(" ")), ["BC-102"]);
   assert.equal(parsed.rows[1].devDoneDate, "");
   assert.equal(parsed.warning, "");
 });
@@ -78,12 +78,12 @@ test("details and meta columns are not treated as ETA", () => {
 });
 
 test("story points sheet maps a bare ticket number to a CC key", () => {
-  const parsed = parseSheet("Ticket number,Story points,ETA\n3592,5,03/10/2026\n", {
+  const parsed = parseSheet("Ticket number,Story points,ETA\n101,5,03/10/2026\n", {
     dateOrder: "dmy",
   });
   assert.equal(columnLabel(parsed.headers, parsed.mapping.ticket), "Ticket number");
   assert.equal(columnLabel(parsed.headers, parsed.mapping.storyPoints), "Story points");
-  assert.deepEqual(parsed.rows[0].issueKeys, ["CC-3592"]);
+  assert.deepEqual(parsed.rows[0].issueKeys, ["CC-101"]);
   assert.equal(parsed.rows[0].storyPoints, "5");
   assert.equal(parsed.rows[0].eta, "2026-10-03");
 });
@@ -101,7 +101,7 @@ test("buildTasks marks slipped ETA and keeps released work hidden", () => {
       { issueKeys: ["CC-2"], eta: "2026-09-01", devDoneDate: "2026-09-02" },
     ],
     "me",
-    "https://anywhereworks.atlassian.net",
+    "https://acme.atlassian.net",
   );
 
   assert.equal(etaUrgency(tasks[0], "2026-10-01"), "slipped");
@@ -109,7 +109,7 @@ test("buildTasks marks slipped ETA and keeps released work hidden", () => {
   assert.equal(tasks[0].releasedLive, false);
   assert.equal(tasks[1].devDone, true);
   assert.equal(tasks[1].releasedLive, true);
-  assert.equal(tasks[0].url, "https://anywhereworks.atlassian.net/browse/CC-1");
+  assert.equal(tasks[0].url, "https://acme.atlassian.net/browse/CC-1");
 
   const visible = sortTasks(tasks, "2026-10-01").filter((task) =>
     isVisibleTask(task, {
@@ -153,10 +153,10 @@ test("formatTimeLeft counts down to zero", () => {
 });
 test("parseJiraBoardUrl reads the site and board id from a pasted link", () => {
   const parsed = parseJiraBoardUrl(
-    "https://anywhereworks.atlassian.net/jira/software/c/projects/CC/boards/193?sprint=16537",
+    "https://acme.atlassian.net/jira/software/c/projects/KEY/boards/7?sprint=100",
   );
-  assert.equal(parsed.jiraBaseUrl, "https://anywhereworks.atlassian.net");
-  assert.equal(parsed.boardId, 193);
+  assert.equal(parsed.jiraBaseUrl, "https://acme.atlassian.net");
+  assert.equal(parsed.boardId, 7);
 
   const rapidView = parseJiraBoardUrl(
     "https://acme.atlassian.net/secure/RapidBoard.jspa?rapidView=42",
